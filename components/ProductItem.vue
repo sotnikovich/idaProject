@@ -1,6 +1,6 @@
 <template>
   <div class="product">
-    <button></button>
+    <button @click="removeProduct"></button>
     <img :src="product.img" class="product__img" />
     <div class="product__info">
       <h2>{{ product.title }}</h2>
@@ -17,6 +17,11 @@ export default {
       required: true,
     },
   },
+  methods: {
+    removeProduct() {
+      this.$emit("remove", this.product);
+    },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -24,12 +29,7 @@ export default {
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.04),
     0px 6px 10px rgba(0, 0, 0, 0.02);
   border-radius: 4px;
-  cursor: pointer;
   position: relative;
-
-  &:hover {
-    opacity: 0.8;
-  }
 
   &__info {
     padding: 16px;
@@ -81,6 +81,10 @@ export default {
     height: 32px;
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 </style>

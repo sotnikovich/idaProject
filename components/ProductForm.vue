@@ -1,17 +1,22 @@
 <template>
   <div class="addForm">
-    <form @submit.prevent>
+    <form @submit.prevent="checkForm">
       <div class="input__title">
         <h4 class="productTitle title">Наименование товара</h4>
       </div>
       <input v-model="product.title" class="input" type="text" placeholder="Введите наименование товара" />
+      <span v-if="!titleIsValid">Поле является обязательным</span>
       <p class="productTitle">Описание товара</p>
       <textarea v-model="product.body" class="about" type="text" placeholder="Введите описание товара" />
       <h4 class="productTitle img">Ссылка на изображение товара</h4>
-      <input v-model="product.img" class="input" type="text" placeholder="Введите ссылку" />
+      <input v-model="product.img" class="input" type="url" placeholder="Введите ссылку" required />
+      <span v-if="!imgIsValid">Поле является обязательным</span>
+      <span></span>
       <h4 class="productTitle price">Цена товара</h4>
-      <input v-model="product.price" class="price" type="text" placeholder="Введите цену" />
-      <button @click="createProduct">Добавить товар</button>
+      <input v-model.number="product.price" class="price" type="number" placeholder="Введите цену" />
+      <span v-if="!priceIsValid">Поле является обязательным</span>
+      <button @click="createProduct" :class="{ 'active': formIsValid }" :disabled="!formIsValid">Добавить
+        товар</button>
     </form>
   </div>
 </template>
@@ -20,14 +25,40 @@ export default {
   data() {
     return {
       product: {
-        title: "",
-        body: "",
-        img: "",
-        price: "",
+        title: null,
+        body: null,
+        img: null,
+        price: null,
       },
+      mobile: null,
     };
   },
+  created() {
+    if (process.browser) {
+      window.addEventListener('resize', this.checkScreen);
+      this.checkScreen();
+    }
+  },
+  computed: {
+    titleIsValid() {
+      return !!this.product.title
+    },
+    imgIsValid() {
+      return !!this.product.img
+    },
+    priceIsValid() {
+      return typeof this.product.price === 'number'
+    },
+    formIsValid() {
+      return this.titleIsValid && this.imgIsValid && this.priceIsValid
+    }
+  },
   methods: {
+    checkForm() {
+      if (this.formIsValid) {
+        console.log('Товар добавлен')
+      }
+    },
     createProduct() {
       this.product.id = Date.now();
       this.$emit("create", this.product);
@@ -38,6 +69,15 @@ export default {
         price: "",
       };
     },
+    checkScreen() {
+      this.windowWidth = window.innerWidth;
+      if (this.windowWidth <= 695) {
+        this.mobile = true;
+        return;
+      }
+      this.mobile = false;
+      return;
+    }
   },
 };
 </script>
@@ -60,10 +100,19 @@ export default {
   @media (max-width: 695px) {
     display: none;
   }
-}
 
-h4 {
-  margin: 0;
+  p {
+    margin: 16px 0 4px 0;
+  }
+
+  span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 8px;
+    line-height: 10px;
+    letter-spacing: -0.02em;
+    color: #FF8484;
+  }
 }
 
 .productTitle {
@@ -75,8 +124,11 @@ h4 {
   letter-spacing: -0.02em;
   color: #49485e;
   position: relative;
+  margin: 16px 0 4px 0;
 
   &.title {
+    margin-top: 0;
+
     &::after {
       position: absolute;
       top: 0;
@@ -127,7 +179,6 @@ input {
   border: none;
   width: 100%;
   height: 36px;
-  margin-bottom: 16px;
 
   &::placeholder {
     font-family: "Source Sans Pro";
@@ -144,10 +195,6 @@ input {
   &:focus {
     outline: none;
   }
-
-  &.price {
-    margin-bottom: 24px;
-  }
 }
 
 textarea {
@@ -159,7 +206,6 @@ textarea {
   width: 100%;
   resize: none;
   box-sizing: border-box;
-  margin-bottom: 16px;
 
   &:focus {
     outline: none;
@@ -189,6 +235,18 @@ button {
   text-align: center;
   letter-spacing: -0.02em;
   color: #b4b4b4;
-  cursor: pointer;
+  cursor: auto;
+  margin-top: 16px;
+
+  &.active {
+    background: #7BAE73;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 }
 </style>

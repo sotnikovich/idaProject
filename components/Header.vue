@@ -4,7 +4,7 @@
     <nav>
       <button @click="toggleMobileNav" v-show="mobile" class="header__menu" :class="{ 'active': mobileNav }"></button>
       <transition name="mobile-nav">
-        <ProductFormMobile v-show="mobileNav" />
+        <ProductFormMobile v-show="mobileNav" @create="$emit('create', product)" />
       </transition>
     </nav>
     <button class="header__sort"></button>

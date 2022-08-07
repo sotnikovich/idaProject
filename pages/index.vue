@@ -3,7 +3,7 @@
     <Header @create="createProduct" />
     <div class="content">
       <ProductForm @create="createProduct" />
-      <ProductList :products="products" />
+      <ProductList :products="products" @remove="removeProduct" />
     </div>
   </div>
 </template>
@@ -12,81 +12,21 @@
 import ProductForm from "../components/ProductForm.vue";
 import ProductList from "../components/ProductList.vue";
 import Header from "../components/Header.vue";
+import { products } from "../products";
 export default {
   name: "IndexPage",
-  components: { ProductForm, ProductList, Header },
   data() {
     return {
-      products: [
-        {
-          id: 1,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 2,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 3,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 4,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 5,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 6,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 7,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 8,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-        {
-          id: 9,
-          title: "Наименование товара",
-          body: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          img: "https://avatars.mds.yandex.net/get-mpic/4338525/img_id1992414260241354018.jpeg/orig",
-          price: 10000,
-        },
-      ],
+      products
     };
   },
+  components: { ProductForm, ProductList, Header },
   methods: {
     createProduct(product) {
-      this.products.push(product);
+      this.products.unshift(product);
+    },
+    removeProduct(product) {
+      this.products = this.products.filter((p) => p.id !== product.id);
     },
   },
 };
