@@ -1,0 +1,6 @@
+{
+  "editor.fontLigatures": true,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  }
+}
